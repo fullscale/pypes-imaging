@@ -1,0 +1,20 @@
+The project provides a basic set of image processing components that can be
+used with pypes. The components all use the Python Imaging Library (PIL) to
+these capabilities.
+
+http://www.pythonware.com/products/pil/index.htm
+
+To build a component, ensure you have PIL installed and then simply run the
+provided setup.py script provided with each component:
+
+python setup.py bdist_egg
+
+This will create an egg file under dist/ in your working directory. This egg
+can then be added to pypes by copying/moving it to the $PYPES/plugins where
+$PYPES is the parent folder containing the pypes application.
+
+If you haven't installed pypes, then please go to:
+
+http://www.pypes.org 
+
+and download the latest release.
