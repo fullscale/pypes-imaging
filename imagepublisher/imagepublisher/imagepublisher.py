@@ -2,6 +2,7 @@ import logging
 import traceback
 import Image
 import StringIO
+import os.path
 from pypes.component import Component
 
 log = logging.getLogger(__name__)
@@ -17,7 +18,7 @@ class ImageWriter(Component):
         self.remove_output('out')
 
         # create a runtime parameter for the user to specify an output filename 
-        self.set_parameter('filename', 'pypes_converted_image')
+        self.set_parameter('output directory', '')
         # runtime paraneter allowing user to choose an output format (defaults to JPEG)
         self.set_parameter('format', 'JPEG', ['JPEG', 'PNG', 'GIF', 'BMP', 'TIFF', 'EPS']) 
 
@@ -27,7 +28,7 @@ class ImageWriter(Component):
         while True:
 
             # grab our runtime parameters
-            filename = self.get_parameter('filename')
+            out_dir = self.get_parameter('output directory')
             format = self.get_parameter('format')
 
             # for each document waiting on our input port
@@ -42,9 +43,19 @@ class ImageWriter(Component):
 
                     # deserialize the image content
                     image = Image.fromstring(mode, size, raw_image)
+               
+                    # use the original file name of the image. if we can't 
+                    # determine the original filename then just make one up 
+                    fname = doc.get_meta('url', default='tmp_image.')
+                        
+                    # strip the extension and add the new one since we
+                    # may have changed the format.
+                    fname = '.'.join(fname.split('.')[:-1]) + '.' + format.lower()
+
+                    file_path = os.path.join(out_dir, fname)
 
                     # attempt to save the image
-                    with open(filename, 'w') as fp:
+                    with open(file_path, 'w') as fp:
                         image.save(fp, format)
 
                 except Exception as e:
