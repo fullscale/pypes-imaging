@@ -52,7 +52,7 @@ class ImageThumbnail(Component):
 
                     # perform the cropping using our user defined border
                     try:
-                        resolution = eval(size)
+                        resolution = eval(resolution)
                     except:
                         resolution = DEFAULT_RESOLUTION
 
